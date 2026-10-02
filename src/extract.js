@@ -330,7 +330,10 @@ export function mergePages(pages, homeUrl) {
   const root = site.split('.').slice(-2).join('.');
   const emails = [...new Set(pages.flatMap(p => p.emails))];
   const own = e => e.endsWith(`@${site}`) || e.endsWith(`.${root}`) || e.endsWith(`@${root}`);
-  emails.sort((a, b) => Number(own(b)) - Number(own(a)));
+  // Company-domain first, then general inboxes (info@, contact@…), then personal/other addresses; stable otherwise.
+  const generic = e => /^(info|contact|hello|hi|sales|office|enquiries|inquiries|team|mail|support|admin|kontakt|contacto|bonjour)@/.test(e);
+  const rank = e => (own(e) ? 0 : 2) + (generic(e) ? 0 : 1);
+  emails.sort((a, b) => rank(a) - rank(b));
   const socials = {};
   for (const p of pages) for (const [k, v] of Object.entries(p.socials)) socials[k] = [...new Set([...(socials[k] ?? []), ...v])];
   return { emails, phones: [...new Set(pages.flatMap(p => p.phones))], socials };

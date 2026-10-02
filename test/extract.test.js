@@ -96,11 +96,11 @@ test('merging puts the company-domain emails first and dedupes', () => {
   const m = mergePages(
     [
       { emails: ['someone@gmail.com', 'info@acme.test'], phones: ['+1555'], socials: { twitter: ['https://x.com/a'] } },
-      { emails: ['info@acme.test', 'sales@eu.acme.test'], phones: ['+1555', '+44'], socials: { twitter: ['https://x.com/a'], github: ['https://github.com/a'] } },
+      { emails: ['info@acme.test', 'sales@eu.acme.test', 'jane@acme.test'], phones: ['+1555', '+44'], socials: { twitter: ['https://x.com/a'], github: ['https://github.com/a'] } },
     ],
     'https://www.acme.test/',
   );
-  assert.deepEqual(m.emails, ['info@acme.test', 'sales@eu.acme.test', 'someone@gmail.com']);
+  assert.deepEqual(m.emails, ['info@acme.test', 'sales@eu.acme.test', 'jane@acme.test', 'someone@gmail.com']);
   assert.deepEqual(m.phones, ['+1555', '+44']);
   assert.deepEqual(m.socials, { twitter: ['https://x.com/a'], github: ['https://github.com/a'] });
 });
