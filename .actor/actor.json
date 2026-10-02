@@ -1,0 +1,378 @@
+{
+  "actorSpecification": 1,
+  "name": "website-company-enricher",
+  "title": "Website Company Enricher — Emails, Socials & Tech Stack",
+  "description": "Turn a list of company websites into enriched leads: emails, phones, LinkedIn & social profiles, tech stack, logo, address and description — one row per company. $0.01 per website, failed sites free.",
+  "version": "0.1",
+  "buildTag": "latest",
+  "input": "./input_schema.json",
+  "dockerfile": "./Dockerfile",
+  "output": "./output_schema.json",
+  "defaultRunOptions": {
+    "memoryMbytes": 1024
+  },
+  "storages": {
+    "dataset": {
+      "actorSpecification": 1,
+      "fields": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Website as requested (normalized)."
+          },
+          "domain": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Domain after redirects, without www."
+          },
+          "finalUrl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Homepage URL after redirects."
+          },
+          "statusCode": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "HTTP status of the homepage."
+          },
+          "companyName": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Company name from structured data, site name or page title."
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Company/site description (meta description)."
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Best email address (company-domain addresses first)."
+          },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "First phone number found (click-to-call links or structured data)."
+          },
+          "linkedin": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Main linkedin profile URL."
+          },
+          "twitter": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Main twitter profile URL."
+          },
+          "facebook": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Main facebook profile URL."
+          },
+          "instagram": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Main instagram profile URL."
+          },
+          "youtube": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Main youtube profile URL."
+          },
+          "tiktok": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Main tiktok profile URL."
+          },
+          "pinterest": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Main pinterest profile URL."
+          },
+          "github": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Main github profile URL."
+          },
+          "discord": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Main discord profile URL."
+          },
+          "telegram": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Main telegram profile URL."
+          },
+          "whatsapp": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Main whatsapp profile URL."
+          },
+          "threads": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Main threads profile URL."
+          },
+          "emails": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "All email addresses found, company-domain first."
+          },
+          "phones": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "All phone numbers found (digits, with + when international)."
+          },
+          "socials": {
+            "type": "object",
+            "description": "All social profiles found, by network.",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "logo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Logo URL (structured data logo, else touch icon/favicon)."
+          },
+          "favicon": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Favicon / touch icon URL."
+          },
+          "image": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Social share image (og:image)."
+          },
+          "language": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Page language (html lang)."
+          },
+          "address": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Postal address from structured data."
+          },
+          "technologies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Technologies detected on the homepage."
+          },
+          "technologyDetails": {
+            "type": "array",
+            "description": "Technologies with version and categories.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "byCategory": {
+            "type": "object",
+            "description": "Technology names grouped by category.",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "pagesVisited": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Pages fetched for this website."
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Why the website couldn't be enriched (not charged)."
+          }
+        },
+        "required": [
+          "url",
+          "emails",
+          "phones",
+          "socials",
+          "technologies",
+          "error"
+        ]
+      },
+      "views": {
+        "overview": {
+          "title": "Leads",
+          "transformation": {
+            "fields": [
+              "domain",
+              "companyName",
+              "email",
+              "phone",
+              "linkedin",
+              "twitter",
+              "facebook",
+              "instagram",
+              "address",
+              "technologies",
+              "error"
+            ]
+          },
+          "display": {
+            "component": "table",
+            "properties": {
+              "domain": {
+                "label": "Domain",
+                "format": "text"
+              },
+              "companyName": {
+                "label": "Company",
+                "format": "text"
+              },
+              "email": {
+                "label": "Email",
+                "format": "text"
+              },
+              "phone": {
+                "label": "Phone",
+                "format": "text"
+              },
+              "linkedin": {
+                "label": "LinkedIn",
+                "format": "link"
+              },
+              "twitter": {
+                "label": "X / Twitter",
+                "format": "link"
+              },
+              "facebook": {
+                "label": "Facebook",
+                "format": "link"
+              },
+              "instagram": {
+                "label": "Instagram",
+                "format": "link"
+              },
+              "address": {
+                "label": "Address",
+                "format": "text"
+              },
+              "technologies": {
+                "label": "Tech stack",
+                "format": "array"
+              },
+              "error": {
+                "label": "Error",
+                "format": "text"
+              }
+            }
+          }
+        },
+        "contacts": {
+          "title": "All contacts",
+          "transformation": {
+            "fields": [
+              "domain",
+              "companyName",
+              "emails",
+              "phones",
+              "socials",
+              "logo"
+            ]
+          },
+          "display": {
+            "component": "table",
+            "properties": {
+              "domain": {
+                "label": "Domain",
+                "format": "text"
+              },
+              "companyName": {
+                "label": "Company",
+                "format": "text"
+              },
+              "emails": {
+                "label": "Emails",
+                "format": "array"
+              },
+              "phones": {
+                "label": "Phones",
+                "format": "array"
+              },
+              "socials": {
+                "label": "Social profiles",
+                "format": "object"
+              },
+              "logo": {
+                "label": "Logo",
+                "format": "image"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

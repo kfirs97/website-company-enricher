@@ -1,0 +1,16 @@
+{
+  "name": "website-company-enricher",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Turn a list of company websites into enriched leads: emails, phones, social profiles, tech stack, logo and company details",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "test": "node --test test/*.test.js"
+  },
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "apify": "^3.7.2",
+    "cheerio": "^1.2.0"
+  }
+}

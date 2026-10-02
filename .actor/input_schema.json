@@ -1,0 +1,59 @@
+{
+  "title": "Website Company Enricher input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "urls": {
+      "title": "Company websites",
+      "type": "array",
+      "description": "Domains or URLs to enrich, e.g. \"acme.com\" or \"https://www.acme.com\". Duplicates are removed.",
+      "editor": "stringList",
+      "prefill": [
+        "plausible.io",
+        "buffer.com",
+        "allbirds.com"
+      ]
+    },
+    "maxPagesPerSite": {
+      "title": "Pages per website",
+      "type": "integer",
+      "description": "Homepage plus the most relevant contact/about/imprint/team pages. More pages find more contacts but take longer. The price per website is the same.",
+      "default": 4,
+      "minimum": 1,
+      "maximum": 10
+    },
+    "includeTechnologies": {
+      "title": "Detect tech stack",
+      "type": "boolean",
+      "description": "Detect the technologies behind each website (CMS, e-commerce platform, analytics, CRM…) using 7,600+ fingerprints.",
+      "default": true
+    },
+    "minConfidence": {
+      "title": "Tech detection: minimum confidence",
+      "type": "integer",
+      "description": "Only report technologies detected with at least this confidence (0–100).",
+      "default": 50,
+      "minimum": 0,
+      "maximum": 100
+    },
+    "maxConcurrency": {
+      "title": "Max concurrency",
+      "type": "integer",
+      "description": "How many websites to process in parallel.",
+      "default": 10,
+      "minimum": 1,
+      "maximum": 20
+    },
+    "timeoutSecs": {
+      "title": "Timeout per page (seconds)",
+      "type": "integer",
+      "description": "Give up on a page after this many seconds. Websites whose homepage can't be loaded are not charged.",
+      "default": 20,
+      "minimum": 5,
+      "maximum": 60
+    }
+  },
+  "required": [
+    "urls"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "Website Company Enricher output",
+  "description": "One record per company website with contacts, social profiles, company details and tech stack.",
+  "properties": {
+    "overview": {
+      "type": "string",
+      "title": "Leads",
+      "description": "One row per company: best email, phone, main social profiles, address and tech stack.",
+      "template": "{{links.apiDefaultDatasetUrl}}/items?view=overview"
+    },
+    "results": {
+      "type": "string",
+      "title": "All results (JSON)",
+      "description": "Full records with every email, phone and social profile found, technology details and pages visited.",
+      "template": "{{links.apiDefaultDatasetUrl}}/items"
+    }
+  }
+}
