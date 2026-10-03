@@ -16,9 +16,10 @@ await Actor.main(async () => {
   log.info(`Enriching ${urls.length} website(s), up to ${opts.maxPages} page(s) each, concurrency ${concurrency}`);
 
   let next = 0;
+  let limitReached = false;
   let done = 0;
   const worker = async () => {
-    while (next < urls.length) {
+    while (next < urls.length && !limitReached) {
       const url = urls[next++];
       let record;
       try {
@@ -28,7 +29,14 @@ await Actor.main(async () => {
       }
       await Actor.pushData(record);
       // Charge only for websites that were actually reached and analyzed.
-      if (!record.error) await Actor.charge({ eventName: 'website-enriched' });
+      if (!record.error) {
+        const { eventChargeLimitReached } = await Actor.charge({ eventName: 'website-enriched' });
+        // The user's spending cap is reached: stop instead of processing websites they can't be charged for.
+        if (eventChargeLimitReached && !limitReached) {
+          limitReached = true;
+          log.warning('Maximum charge for this run reached — stopping. Raise "Max cost per run" to process the remaining websites.');
+        }
+      }
       if (++done % 25 === 0) log.info(`Progress: ${done}/${urls.length}`);
     }
   };
